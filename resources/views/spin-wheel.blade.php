@@ -24,6 +24,13 @@
                             class="game-input-premium"
                             maxlength="10"
                             dir="ltr"
+                            autocomplete="off"
+                            autocorrect="off"
+                            autocapitalize="off"
+                            spellcheck="false"
+                            inputmode="numeric"
+                            pattern="[0-9]*"
+                            name="phone_number"
                         />
                         <div class="input-hint">أدخل رقم الهاتف (يبدأ بـ 05 ويتكون من 10 أرقام)</div>
                         <small id="phoneError" class="error-message-premium d-block mt-3" style="display: none !important;"></small>

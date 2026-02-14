@@ -1,9 +1,9 @@
 (function () {
-    'use strict';
+    "use strict";
 
     var gameState = window.gameState || {
-        userPhone: '',
-        userPhoneDisplay: '',
+        userPhone: "",
+        userPhoneDisplay: "",
         hasSpun: false,
         isSpinning: false,
         wheel: null,
@@ -15,55 +15,86 @@
     };
 
     var defaultPrizes = [
-        { id: 1, label: 'استشارة مجانية', backgroundColor: '#0d9488', labelColor: '#fff', probability_weight: 3 },
-        { id: 2, label: 'فحص مجاني', backgroundColor: '#2563eb', labelColor: '#fff', probability_weight: 3 },
-        { id: 3, label: 'إجراء مجاني', backgroundColor: '#7c3aed', labelColor: '#fff', probability_weight: 1 },
-        { id: 4, label: 'خصم 50%', backgroundColor: '#c026d3', labelColor: '#fff', probability_weight: 2 },
-        { id: 5, label: 'عروض حصرية', backgroundColor: '#dc2626', labelColor: '#fff', probability_weight: 2 },
+        {
+            id: 1,
+            label: "استشارة مجانية",
+            backgroundColor: "#0d9488",
+            labelColor: "#fff",
+            probability_weight: 3,
+        },
+        {
+            id: 2,
+            label: "فحص مجاني",
+            backgroundColor: "#2563eb",
+            labelColor: "#fff",
+            probability_weight: 3,
+        },
+        {
+            id: 3,
+            label: "إجراء مجاني",
+            backgroundColor: "#7c3aed",
+            labelColor: "#fff",
+            probability_weight: 1,
+        },
+        {
+            id: 4,
+            label: "خصم 50%",
+            backgroundColor: "#c026d3",
+            labelColor: "#fff",
+            probability_weight: 2,
+        },
+        {
+            id: 5,
+            label: "عروض حصرية",
+            backgroundColor: "#dc2626",
+            labelColor: "#fff",
+            probability_weight: 2,
+        },
     ];
 
-    var phoneInput = document.getElementById('phoneInput');
-    var phoneError = document.getElementById('phoneError');
-    var phoneSuccess = document.getElementById('phoneSuccess');
-    var startGameBtn = document.getElementById('startGameBtn');
-    var phoneSection = document.getElementById('phoneSection');
-    var wheelSection = document.getElementById('wheelSection');
-    var wheelEl = document.getElementById('wheelEl');
-    var logoRef = document.getElementById('logoRef');
-    var spinBtn = document.getElementById('spinBtn');
-    var spinBtnText = document.getElementById('spinBtnText');
-    var resultModal = document.getElementById('resultModal');
-    var resultDisplay = document.getElementById('resultDisplay');
-    var resultPhoneNumber = document.getElementById('resultPhoneNumber');
-    var claimResultBtn = document.getElementById('claimResultBtn');
-    var whatsappBtn = document.getElementById('whatsappBtn');
-    var saveResultForm = document.getElementById('saveResultForm');
-    var userPhoneDisplayEl = document.getElementById('userPhoneDisplay');
-    var spinsCountDisplay = document.getElementById('spinsCountDisplay');
-    var winnersCountDisplay = document.getElementById('winnersCountDisplay');
+    var phoneInput = document.getElementById("phoneInput");
+    var phoneError = document.getElementById("phoneError");
+    var phoneSuccess = document.getElementById("phoneSuccess");
+    var startGameBtn = document.getElementById("startGameBtn");
+    var phoneSection = document.getElementById("phoneSection");
+    var wheelSection = document.getElementById("wheelSection");
+    var wheelEl = document.getElementById("wheelEl");
+    var logoRef = document.getElementById("logoRef");
+    var spinBtn = document.getElementById("spinBtn");
+    var spinBtnText = document.getElementById("spinBtnText");
+    var resultModal = document.getElementById("resultModal");
+    var resultDisplay = document.getElementById("resultDisplay");
+    var resultPhoneNumber = document.getElementById("resultPhoneNumber");
+    var claimResultBtn = document.getElementById("claimResultBtn");
+    var whatsappBtn = document.getElementById("whatsappBtn");
+    var saveResultForm = document.getElementById("saveResultForm");
+    var userPhoneDisplayEl = document.getElementById("userPhoneDisplay");
+    var spinsCountDisplay = document.getElementById("spinsCountDisplay");
+    var winnersCountDisplay = document.getElementById("winnersCountDisplay");
 
     function validatePhone(phone) {
-        var digits = phone.replace(/\D/g, '');
+        var digits = phone.replace(/\D/g, "");
         return /^05\d{8}$/.test(digits);
     }
 
     function updatePhoneValidation() {
-        var phone = (phoneInput && phoneInput.value.trim()) || '';
+        var phone = (phoneInput && phoneInput.value.trim()) || "";
         var isValid = validatePhone(phone);
 
-        if (phoneError) phoneError.style.display = 'none';
-        if (phoneSuccess) phoneSuccess.style.display = 'none';
+        if (phoneError) phoneError.style.display = "none";
+        if (phoneSuccess) phoneSuccess.style.display = "none";
 
         if (phone.length > 0) {
             if (isValid) {
                 if (phoneSuccess) {
-                    phoneSuccess.style.display = 'block';
+                    phoneSuccess.style.display = "block";
                 }
                 if (startGameBtn) startGameBtn.disabled = false;
             } else {
                 if (phoneError) {
-                    phoneError.textContent = 'الرقم يجب أن يبدأ بـ 05 ويتكون من 10 أرقام (05xxxxxxxx)';
-                    phoneError.style.display = 'block';
+                    phoneError.textContent =
+                        "الرقم يجب أن يبدأ بـ 05 ويتكون من 10 أرقام (05xxxxxxxx)";
+                    phoneError.style.display = "block";
                 }
                 if (startGameBtn) startGameBtn.disabled = true;
             }
@@ -73,35 +104,55 @@
     }
 
     function updateStats() {
-        if (spinsCountDisplay) spinsCountDisplay.textContent = gameState.spinsCount;
-        var baseWinners = typeof window.winnersCount !== 'undefined' ? window.winnersCount : 0;
-        if (winnersCountDisplay) winnersCountDisplay.textContent = baseWinners + gameState.winnersCount;
+        if (spinsCountDisplay)
+            spinsCountDisplay.textContent = gameState.spinsCount;
+        var baseWinners =
+            typeof window.winnersCount !== "undefined"
+                ? window.winnersCount
+                : 0;
+        if (winnersCountDisplay)
+            winnersCountDisplay.textContent =
+                baseWinners + gameState.winnersCount;
     }
 
     function setWhatsAppLink(phone, message) {
         if (!whatsappBtn) return;
-        var num = (window.whatsappNumber || '905357176133').replace(/\D/g, '');
-        var text = encodeURIComponent(message || 'مرحباً، أريد استلام جائزتي من دولاب الحظ. رقمي: ' + (phone || ''));
-        whatsappBtn.href = 'https://wa.me/' + num + '?text=' + text;
+        var num = (window.whatsappNumber || "905357176133").replace(/\D/g, "");
+        var text = encodeURIComponent(
+            message ||
+                "مرحباً، أريد استلام جائزتي من دولاب الحظ. رقمي: " +
+                    (phone || ""),
+        );
+        whatsappBtn.href = "https://wa.me/" + num + "?text=" + text;
     }
 
     function savePhoneToServer(phone) {
-        var token = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : '';
+        var token = document.querySelector('meta[name="csrf-token"]')
+            ? document
+                  .querySelector('meta[name="csrf-token"]')
+                  .getAttribute("content")
+            : "";
         var formData = new FormData();
-        formData.append('phone', phone.replace(/\D/g, ''));
-        formData.append('_token', token || '');
+        formData.append("phone", phone.replace(/\D/g, ""));
+        formData.append("_token", token || "");
 
-        return fetch('/spin-wheel/start', {
-            method: 'POST',
+        return fetch("/spin-wheel/start", {
+            method: "POST",
             body: formData,
             headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json',
+                "X-Requested-With": "XMLHttpRequest",
+                Accept: "application/json",
             },
         }).then(function (res) {
             if (!res.ok) {
                 return res.json().then(function (data) {
-                    var msg = (data && data.message) || (data && data.errors && data.errors.phone && data.errors.phone[0]) || 'فشل في التسجيل';
+                    var msg =
+                        (data && data.message) ||
+                        (data &&
+                            data.errors &&
+                            data.errors.phone &&
+                            data.errors.phone[0]) ||
+                        "فشل في التسجيل";
                     throw new Error(msg);
                 });
             }
@@ -110,20 +161,25 @@
     }
 
     function startGame() {
-        var phone = phoneInput ? phoneInput.value.trim().replace(/\D/g, '') : '';
-        var btnTextEl = startGameBtn ? startGameBtn.querySelector('.btn-text') : null;
+        var phone = phoneInput
+            ? phoneInput.value.trim().replace(/\D/g, "")
+            : "";
+        var btnTextEl = startGameBtn
+            ? startGameBtn.querySelector(".btn-text")
+            : null;
 
-        if (!validatePhone(phoneInput ? phoneInput.value.trim() : '')) {
+        if (!validatePhone(phoneInput ? phoneInput.value.trim() : "")) {
             if (phoneError) {
-                phoneError.textContent = 'الرقم يجب أن يبدأ بـ 05 ويتكون من 10 أرقام (05xxxxxxxx)';
-                phoneError.style.display = 'block';
+                phoneError.textContent =
+                    "الرقم يجب أن يبدأ بـ 05 ويتكون من 10 أرقام (05xxxxxxxx)";
+                phoneError.style.display = "block";
             }
             return;
         }
 
         if (startGameBtn && btnTextEl) {
             startGameBtn.disabled = true;
-            btnTextEl.textContent = 'جاري التسجيل...';
+            btnTextEl.textContent = "جاري التسجيل...";
         }
 
         savePhoneToServer(phone)
@@ -132,31 +188,35 @@
                 gameState.userPhoneDisplay = phone;
 
                 if (phoneSection) {
-                    phoneSection.classList.add('spin-screen-hidden');
-                    phoneSection.classList.remove('spin-screen-visible');
+                    phoneSection.classList.add("spin-screen-hidden");
+                    phoneSection.classList.remove("spin-screen-visible");
                 }
                 if (wheelSection) {
-                    wheelSection.classList.add('spin-screen-visible');
-                    wheelSection.style.display = '';
+                    wheelSection.classList.add("spin-screen-visible");
+                    wheelSection.style.display = "";
                 }
 
-                if (userPhoneDisplayEl) userPhoneDisplayEl.textContent = gameState.userPhoneDisplay || gameState.userPhone;
+                if (userPhoneDisplayEl)
+                    userPhoneDisplayEl.textContent =
+                        gameState.userPhoneDisplay || gameState.userPhone;
                 updateStats();
 
-                gameState.prizes = (window.wheelItemsFromBlade && window.wheelItemsFromBlade.length > 0)
-                    ? window.wheelItemsFromBlade
-                    : defaultPrizes;
+                gameState.prizes =
+                    window.wheelItemsFromBlade &&
+                    window.wheelItemsFromBlade.length > 0
+                        ? window.wheelItemsFromBlade
+                        : defaultPrizes;
 
                 setTimeout(initializeWheel, 100);
             })
             .catch(function (err) {
                 if (phoneError) {
-                    phoneError.textContent = err.message || 'فشل في التسجيل';
-                    phoneError.style.display = 'block';
+                    phoneError.textContent = err.message || "فشل في التسجيل";
+                    phoneError.style.display = "block";
                 }
                 if (startGameBtn && btnTextEl) {
                     startGameBtn.disabled = false;
-                    btnTextEl.textContent = 'ابدأ الآن';
+                    btnTextEl.textContent = "ابدأ الآن";
                 }
             });
     }
@@ -164,7 +224,7 @@
     function pickWinnerByWeight(items) {
         var total = 0;
         for (var i = 0; i < items.length; i++) {
-            total += (items[i].probability_weight || 1);
+            total += items[i].probability_weight || 1;
         }
         var r = Math.random() * total;
         for (var j = 0; j < items.length; j++) {
@@ -182,21 +242,21 @@
         var wheelItems = prizes.map(function (p) {
             return {
                 label: p.label,
-                backgroundColor: p.backgroundColor || '#2ecc71',
-                labelColor: p.labelColor || '#fff',
+                backgroundColor: p.backgroundColor || "#2ecc71",
+                labelColor: p.labelColor || "#fff",
                 weight: p.probability_weight || 1,
             };
         });
 
         var Wheel = window.spinWheel && window.spinWheel.Wheel;
         if (!Wheel) {
-            console.error('Wheel not found');
+            console.error("Wheel not found");
             return;
         }
 
         gameState.wheel = new Wheel(wheelEl, {
             items: wheelItems,
-            itemLabelFont: '900 400px Cairo',
+            itemLabelFont: "900 400px Cairo",
             itemLabelRadius: 0.5,
             itemLabelRadiusMax: 0.9,
             radius: 0.95,
@@ -221,7 +281,8 @@
 
                 if (spinBtn) {
                     spinBtn.disabled = true;
-                    if (spinBtnText) spinBtnText.textContent = 'اكتملت المحاولة';
+                    if (spinBtnText)
+                        spinBtnText.textContent = "اكتملت المحاولة";
                 }
 
                 saveResultThenShowModal(winnerItem);
@@ -232,19 +293,22 @@
     function updateLogoRotation() {
         if (gameState.wheel && logoRef) {
             var rot = gameState.wheel.rotation % 360;
-            logoRef.style.transform = 'translate(-50%, -50%) rotate(' + rot + 'deg)';
+            logoRef.style.transform =
+                "translate(-50%, -50%) rotate(" + rot + "deg)";
             if (gameState.isSpinning) {
-                gameState.animationFrameId = requestAnimationFrame(updateLogoRotation);
+                gameState.animationFrameId =
+                    requestAnimationFrame(updateLogoRotation);
             }
         }
     }
 
     function spin() {
-        if (gameState.isSpinning || gameState.hasSpun || !gameState.wheel) return;
+        if (gameState.isSpinning || gameState.hasSpun || !gameState.wheel)
+            return;
 
         gameState.isSpinning = true;
         if (spinBtn) spinBtn.disabled = true;
-        if (spinBtnText) spinBtnText.textContent = 'جاري الدوران...';
+        if (spinBtnText) spinBtnText.textContent = "جاري الدوران...";
 
         updateLogoRotation();
 
@@ -261,21 +325,33 @@
     }
 
     function saveResultThenShowModal(winnerItem) {
-        var token = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : '';
+        var token = document.querySelector('meta[name="csrf-token"]')
+            ? document
+                  .querySelector('meta[name="csrf-token"]')
+                  .getAttribute("content")
+            : "";
         var formData = new FormData();
-        formData.append('prize_id', winnerItem.id || winnerItem.prize_id || 0);
-        formData.append('_token', token || '');
+        formData.append("prize_id", winnerItem.id || winnerItem.prize_id || 0);
+        formData.append("_token", token || "");
 
-        fetch(saveResultForm ? saveResultForm.getAttribute('action') : '/spin-wheel/save-result', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json',
+        fetch(
+            saveResultForm
+                ? saveResultForm.getAttribute("action")
+                : "/spin-wheel/save-result",
+            {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    Accept: "application/json",
+                },
             },
-        })
+        )
             .then(function (res) {
-                if (!res.ok) return res.json().then(function () { throw new Error('فشل حفظ النتيجة'); });
+                if (!res.ok)
+                    return res.json().then(function () {
+                        throw new Error("فشل حفظ النتيجة");
+                    });
                 return res.json();
             })
             .then(function () {
@@ -288,19 +364,24 @@
 
     function showResultModal(winnerItem) {
         if (resultDisplay) resultDisplay.textContent = winnerItem.label;
-        if (resultPhoneNumber) resultPhoneNumber.textContent = gameState.userPhoneDisplay || gameState.userPhone;
+        if (resultPhoneNumber)
+            resultPhoneNumber.textContent =
+                gameState.userPhoneDisplay || gameState.userPhone;
         if (resultModal) {
             /* Small delay so user sees wheel land on winning segment before popup */
             setTimeout(function () {
                 var Modal = window.bootstrap && window.bootstrap.Modal;
                 if (Modal) {
-                    var modal = new Modal(resultModal, { backdrop: 'static', keyboard: false });
+                    var modal = new Modal(resultModal, {
+                        backdrop: "static",
+                        keyboard: false,
+                    });
                     modal.show();
                 } else {
-                    resultModal.classList.add('show');
-                    resultModal.style.display = 'block';
-                    resultModal.setAttribute('aria-modal', 'true');
-                    document.body.classList.add('modal-open');
+                    resultModal.classList.add("show");
+                    resultModal.style.display = "block";
+                    resultModal.setAttribute("aria-modal", "true");
+                    document.body.classList.add("modal-open");
                 }
             }, 400);
         }
@@ -318,31 +399,38 @@
     }
 
     if (phoneInput) {
-        phoneInput.addEventListener('input', updatePhoneValidation);
-        phoneInput.addEventListener('keyup', function (e) {
-            if (e.key === 'Enter') startGame();
+        phoneInput.addEventListener("input", updatePhoneValidation);
+        phoneInput.addEventListener("keyup", function (e) {
+            if (e.key === "Enter") startGame();
         });
     }
 
     if (startGameBtn) {
-        startGameBtn.addEventListener('click', startGame);
+        startGameBtn.addEventListener("click", startGame);
     }
 
     if (spinBtn) {
-        spinBtn.addEventListener('click', spin);
+        spinBtn.addEventListener("click", spin);
     }
 
     if (claimResultBtn) {
-        claimResultBtn.addEventListener('click', onClaimResult);
+        claimResultBtn.addEventListener("click", onClaimResult);
     }
 
-    var closeResultModalBtn = document.getElementById('closeResultModalBtn');
+    var closeResultModalBtn = document.getElementById("closeResultModalBtn");
     if (closeResultModalBtn) {
-        closeResultModalBtn.addEventListener('click', closeResultModal);
+        closeResultModalBtn.addEventListener("click", closeResultModal);
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        if (phoneInput) updatePhoneValidation();
+    document.addEventListener("DOMContentLoaded", function () {
+        // Ensure phone input is never disabled or readonly
+        if (phoneInput) {
+            phoneInput.disabled = false;
+            phoneInput.readOnly = false;
+            phoneInput.removeAttribute("disabled");
+            phoneInput.removeAttribute("readonly");
+            updatePhoneValidation();
+        }
     });
 
     window.gameState = gameState;

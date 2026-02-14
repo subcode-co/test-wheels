@@ -78,25 +78,41 @@
     }
 
     function updatePhoneValidation() {
-        var phone = (phoneInput && phoneInput.value.trim()) || "";
-        var isValid = validatePhone(phone);
+        var rawValue = (phoneInput && phoneInput.value) || "";
+        var digits = rawValue.replace(/\D/g, "");
+        var isValid = validatePhone(digits);
 
         if (phoneError) phoneError.style.display = "none";
         if (phoneSuccess) phoneSuccess.style.display = "none";
 
-        if (phone.length > 0) {
+        if (digits.length > 0) {
             if (isValid) {
                 if (phoneSuccess) {
                     phoneSuccess.style.display = "block";
                 }
-                if (startGameBtn) startGameBtn.disabled = false;
-            } else {
-                if (phoneError) {
-                    phoneError.textContent =
-                        "الرقم يجب أن يبدأ بـ 05 ويتكون من 10 أرقام (05xxxxxxxx)";
-                    phoneError.style.display = "block";
+                if (startGameBtn) {
+                    startGameBtn.disabled = false;
+                    startGameBtn.style.opacity = "1";
+                    startGameBtn.style.pointerEvents = "auto";
                 }
-                if (startGameBtn) startGameBtn.disabled = true;
+            } else {
+                // Only show error if they've typed enough to potentially be a full number
+                // or if they are clearly starting wrong (not with 05)
+                if (
+                    digits.length >= 10 ||
+                    (digits.length >= 2 && !digits.startsWith("05"))
+                ) {
+                    if (phoneError) {
+                        phoneError.textContent =
+                            "الرقم يجب أن يبدأ بـ 05 ويتكون من 10 أرقام";
+                        phoneError.style.display = "block";
+                    }
+                }
+                if (startGameBtn) {
+                    startGameBtn.disabled = true;
+                    // Don't modify opacity if we want to keep the design consistent,
+                    // but sometimes mobile needs a redraw
+                }
             }
         } else {
             if (startGameBtn) startGameBtn.disabled = true;
@@ -440,8 +456,6 @@
     document.addEventListener("DOMContentLoaded", function () {
         // Ensure phone input is never disabled or readonly
         if (phoneInput) {
-            // Force clear any browser autofill
-            phoneInput.value = "";
             phoneInput.disabled = false;
             phoneInput.readOnly = false;
             phoneInput.removeAttribute("disabled");
@@ -449,28 +463,24 @@
             phoneInput.removeAttribute("autocomplete");
             phoneInput.setAttribute("autocomplete", "off");
 
-            // Force hide validation messages
+            // Force hide validation messages initially
             if (phoneError) phoneError.style.display = "none";
             if (phoneSuccess) phoneSuccess.style.display = "none";
 
             // Ensure button is disabled initially
-            if (startGameBtn) startGameBtn.disabled = true;
+            if (startGameBtn) {
+                startGameBtn.disabled = true;
+            }
 
-            // Run validation after a small delay to override any browser autofill
-            setTimeout(function () {
-                if (phoneInput) {
-                    phoneInput.value = "";
-                    updatePhoneValidation();
-                }
-            }, 100);
-
-            // Detect and clear autofill
+            // Detect and handle potential autofill without clearing user-typed content
             phoneInput.addEventListener("animationstart", function (e) {
                 if (e.animationName === "onAutoFillStart") {
-                    phoneInput.value = "";
                     updatePhoneValidation();
                 }
             });
+
+            // Initial validation check (in case of browser-restored values)
+            setTimeout(updatePhoneValidation, 500);
         }
     });
 

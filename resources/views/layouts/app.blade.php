@@ -15,6 +15,7 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/base.css') }}">
+    
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('css/spin-wheel.css') }}">
     

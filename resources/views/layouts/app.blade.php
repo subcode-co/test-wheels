@@ -54,12 +54,10 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Spin Wheel Library -->
-    <script src="{{ asset('js/spin-wheel-library.js') }}"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Custom JS -->
-<script src="{{ asset('js/spin-wheel.js') }}?v={{ time() }}"></script>    
+    <script type="module" src="{{ asset('js/spin-wheel.js') }}?v={{ time() }}"></script>
     @stack('scripts')
 </body>
 </html>

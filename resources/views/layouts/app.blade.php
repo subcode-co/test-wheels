@@ -57,7 +57,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Custom JS -->
-    <script type="module" src="{{ asset('js/spin-wheel.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/spin-wheel.js') }}?v={{ time() }}"></script>
     @stack('scripts')
 </body>
 </html>

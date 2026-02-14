@@ -425,11 +425,37 @@
     document.addEventListener("DOMContentLoaded", function () {
         // Ensure phone input is never disabled or readonly
         if (phoneInput) {
+            // Force clear any browser autofill
+            phoneInput.value = "";
             phoneInput.disabled = false;
             phoneInput.readOnly = false;
             phoneInput.removeAttribute("disabled");
             phoneInput.removeAttribute("readonly");
-            updatePhoneValidation();
+            phoneInput.removeAttribute("autocomplete");
+            phoneInput.setAttribute("autocomplete", "off");
+
+            // Force hide validation messages
+            if (phoneError) phoneError.style.display = "none";
+            if (phoneSuccess) phoneSuccess.style.display = "none";
+
+            // Ensure button is disabled initially
+            if (startGameBtn) startGameBtn.disabled = true;
+
+            // Run validation after a small delay to override any browser autofill
+            setTimeout(function () {
+                if (phoneInput) {
+                    phoneInput.value = "";
+                    updatePhoneValidation();
+                }
+            }, 100);
+
+            // Detect and clear autofill
+            phoneInput.addEventListener("animationstart", function (e) {
+                if (e.animationName === "onAutoFillStart") {
+                    phoneInput.value = "";
+                    updatePhoneValidation();
+                }
+            });
         }
     });
 

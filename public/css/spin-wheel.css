@@ -3,15 +3,17 @@
 /* ----- One screen at a time: form hides, wheel shows on top ----- */
 .spin-wheel-app {
     position: relative;
-    min-height: calc(100vh - 72px);
-    min-height: calc(100dvh - 72px);
+    min-height: calc(100vh - var(--navbar-height));
+    min-height: calc(100dvh - var(--navbar-height));
 }
 
 .spin-screen {
-    position: absolute;
-    inset: 0;
-    min-height: 100%;
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - var(--navbar-height));
+    min-height: calc(100dvh - var(--navbar-height));
     z-index: 1;
+    pointer-events: none;
 }
 
 /* Form screen: centered in viewport, below navbar, responsive */
@@ -21,12 +23,9 @@
     justify-content: center;
     padding: 24px 20px 32px;
     box-sizing: border-box;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    min-height: 100%;
     overflow-y: auto;
+    pointer-events: auto;
+    z-index: 5;
 }
 
 .spin-screen-wheel {
@@ -34,12 +33,14 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
-    min-height: 100vh;
+    min-height: calc(100vh - var(--navbar-height));
+    min-height: calc(100dvh - var(--navbar-height));
 }
 
 .spin-screen-wheel.spin-screen-visible {
     display: flex !important;
     z-index: 2;
+    pointer-events: auto;
 }
 
 .spin-screen-phone.spin-screen-hidden {
@@ -51,6 +52,7 @@
 .spin-screen-result.spin-screen-visible {
     display: flex !important;
     z-index: 3;
+    pointer-events: auto;
 }
 
 /* Responsive: form centered across all devices */

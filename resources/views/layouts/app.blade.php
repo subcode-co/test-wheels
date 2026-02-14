@@ -59,8 +59,7 @@
     <script src="{{ asset('js/spin-wheel-library.js') }}"></script>
     
     <!-- Custom JS -->
-    <script src="{{ asset('js/spin-wheel.js') }}"></script>
-    
+<script src="{{ asset('js/spin-wheel.js') }}?v={{ time() }}"></script>    
     @stack('scripts')
 </body>
 </html>

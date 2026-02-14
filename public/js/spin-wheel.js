@@ -401,12 +401,27 @@
     if (phoneInput) {
         phoneInput.addEventListener("input", updatePhoneValidation);
         phoneInput.addEventListener("keyup", function (e) {
-            if (e.key === "Enter") startGame();
+            if (e.key === "Enter") {
+                e.preventDefault();
+                startGame();
+            }
+        });
+
+        // Prevent any accidental form submission on focus/click
+        phoneInput.addEventListener("focus", function (e) {
+            e.stopPropagation();
+        });
+
+        phoneInput.addEventListener("click", function (e) {
+            e.stopPropagation();
         });
     }
 
     if (startGameBtn) {
-        startGameBtn.addEventListener("click", startGame);
+        startGameBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            startGame();
+        });
     }
 
     if (spinBtn) {

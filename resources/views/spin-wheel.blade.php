@@ -39,7 +39,7 @@
 
                     <p class="one-attempt-message">لديك محاولة واحدة فقط — لا إعادة ولا تغيير</p>
 
-                    <button id="startGameBtn" class="btn-primary-game-premium mt-4" disabled>
+                    <button id="startGameBtn" type="button" class="btn-primary-game-premium mt-4" disabled>
                         <span class="btn-icon">🎰</span>
                         <span class="btn-text">ابدأ الآن</span>
                         <span class="btn-arrow">←</span>

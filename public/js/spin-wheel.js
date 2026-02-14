@@ -83,6 +83,7 @@
         var isValid = validatePhone(digits);
 
         if (phoneError) phoneError.style.display = "none";
+
         if (phoneSuccess) phoneSuccess.style.display = "none";
 
         if (digits.length > 0) {

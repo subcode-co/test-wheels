@@ -28,7 +28,6 @@
     var startGameBtn = document.getElementById('startGameBtn');
     var phoneSection = document.getElementById('phoneSection');
     var wheelSection = document.getElementById('wheelSection');
-    var resultSection = document.getElementById('resultSection');
     var wheelEl = document.getElementById('wheelEl');
     var logoRef = document.getElementById('logoRef');
     var spinBtn = document.getElementById('spinBtn');
@@ -36,8 +35,6 @@
     var resultModal = document.getElementById('resultModal');
     var resultDisplay = document.getElementById('resultDisplay');
     var resultPhoneNumber = document.getElementById('resultPhoneNumber');
-    var resultPrizeName = document.getElementById('resultPrizeName');
-    var resultPhoneDisplay = document.getElementById('resultPhoneDisplay');
     var claimResultBtn = document.getElementById('claimResultBtn');
     var whatsappBtn = document.getElementById('whatsappBtn');
     var saveResultForm = document.getElementById('saveResultForm');
@@ -293,11 +290,19 @@
         if (resultDisplay) resultDisplay.textContent = winnerItem.label;
         if (resultPhoneNumber) resultPhoneNumber.textContent = gameState.userPhoneDisplay || gameState.userPhone;
         if (resultModal) {
-            var Modal = window.bootstrap && window.bootstrap.Modal;
-            if (Modal) {
-                var modal = new Modal(resultModal);
-                modal.show();
-            }
+            /* Small delay so user sees wheel land on winning segment before popup */
+            setTimeout(function () {
+                var Modal = window.bootstrap && window.bootstrap.Modal;
+                if (Modal) {
+                    var modal = new Modal(resultModal, { backdrop: 'static', keyboard: false });
+                    modal.show();
+                } else {
+                    resultModal.classList.add('show');
+                    resultModal.style.display = 'block';
+                    resultModal.setAttribute('aria-modal', 'true');
+                    document.body.classList.add('modal-open');
+                }
+            }, 400);
         }
     }
 
@@ -337,17 +342,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        var serverResult = window.serverResult;
-        if (serverResult) {
-            if (resultSection) resultSection.style.display = 'flex';
-            if (phoneSection) phoneSection.style.display = 'none';
-            if (wheelSection) wheelSection.style.display = 'none';
-            if (resultPrizeName) resultPrizeName.textContent = serverResult.prize_name || '';
-            if (resultPhoneDisplay) resultPhoneDisplay.textContent = serverResult.phone_display || '';
-            setWhatsAppLink(serverResult.phone_display, 'مرحباً، أريد استلام جائزتي: ' + (serverResult.prize_name || ''));
-        } else {
-            if (phoneInput) updatePhoneValidation();
-        }
+        if (phoneInput) updatePhoneValidation();
     });
 
     window.gameState = gameState;

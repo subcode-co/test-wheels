@@ -3,7 +3,7 @@
 @section('content')
 <div class="game-container spin-wheel-app" id="spinWheelApp">
     {{-- 1️⃣ Phone Number Entry Page --}}
-    <section id="phoneSection" class="spin-screen spin-screen-phone" style="{{ isset($result) ? 'display: none !important;' : '' }}">
+    <section id="phoneSection" class="spin-screen spin-screen-phone">
         <div class="auth-box-premium">
             <div class="auth-box-top">
                 <div class="auth-header">
@@ -11,7 +11,7 @@
                         <img src="{{ asset('images/noktaclinic1.png') }}" alt="Logo" class="auth-logo" />
                     </div>
                     <h1 class="glow-text display-5 mt-3 text-danger"><span>🎡</span> دولاب الحظ</h1>
-                    <p class="subtitle-auth">أدخل رقم هاتفك للحصول على فرصة واحدة للفوز بمكافأة حقيقية</p>
+                    <p class="subtitle-auth"> سجل رقمك لتجربة حظك اليوم </p>
                 </div>
 
                 <div class="form-container-premium">
@@ -88,37 +88,6 @@
         </div>
     </section>
 
-    {{-- 3️⃣ Result Page --}}
-    <section id="resultSection" class="spin-screen spin-screen-result" style="{{ isset($result) ? 'display: flex !important;' : 'display: none;' }}">
-        <div class="glass-card result-card">
-            <div class="result-header">
-                <div class="confetti-icon">🎉</div>
-                <h2 class="result-title">مبروك!</h2>
-            </div>
-            <div class="prize-text-wrapper">
-                <p class="result-prize-label">جائزتك:</p>
-                <div class="prize-display" id="resultPrizeName">{{ $result['prize_name'] ?? '' }}</div>
-            </div>
-            <p class="result-locked-msg">هذه النتيجة نهائية ولا يمكن تغييرها</p>
-            <p class="result-phone-tag">
-                📱 الرقم المسجل: <strong id="resultPhoneDisplay">{{ $result['phone_display'] ?? '' }}</strong>
-            </p>
-            <div class="result-steps">
-                <p class="result-steps-title">كيفية استلام الجائزة:</p>
-                <ol class="result-steps-list">
-                    <li>تواصل معنا عبر واتساب بالضغط على الزر أدناه</li>
-                    <li>أرسل رقم هاتفك والجائزة التي فزت بها</li>
-                    <li>سنؤكد لك موعد الاستلام أو التفاصيل</li>
-                </ol>
-            </div>
-            <a id="whatsappBtn" href="#" target="_blank" rel="noopener" class="btn-whatsapp">
-                <span class="whatsapp-icon">💬</span>
- 
-                 <span>أستلام الأن </span>
-            </a>
-        </div>
-    </section>
-
     {{-- Hidden form for saving result --}}
     <form id="saveResultForm" action="{{ route('spin-wheel.save-result') }}" method="POST" style="display: none;">
         @csrf
@@ -126,9 +95,8 @@
     </form>
 </div>
 
-@if(!isset($result))
-{{-- In-page result modal with close button (no WhatsApp) --}}
-<div class="modal fade" id="resultModal" data-bs-backdrop="static" tabindex="-1">
+ 
+ <div class="modal fade" id="resultModal" data-bs-backdrop="static" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content winner-modal">
             <div class="modal-body text-center px-5 py-6 position-relative">
@@ -144,16 +112,16 @@
                 <p class="phone-tag">
                     📱 سيتم إرسال الكود للرقم: <span class="phone-number" id="resultPhoneNumber"></span>
                 </p>
-                <button type="button" id="claimResultBtn" class="btn-claim">
-                    <span class="claim-text">استلام الآن</span>
-                    <span class="claim-arrow">←</span>
-                </button>
+              <button type="button" class="btn-claim" onclick="window.location='{{ url('spin-wheel') }}'">
+                <span class="claim-text">استلام الآن</span>
+                <span class="claim-arrow">←</span>
+            </button>
+
             </div>
         </div>
     </div>
 </div>
-@endif
-@endsection
+ @endsection
 
 @push('scripts')
 <script>

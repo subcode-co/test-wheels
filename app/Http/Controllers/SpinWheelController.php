@@ -20,10 +20,12 @@ class SpinWheelController extends Controller
         $prizes = Prize::active()->ordered()->get();
         $wheelItems = $prizes->map(fn (Prize $p) => [
             'id' => $p->id,
+            'code' => $p->code,
             'label' => $p->name,
             'backgroundColor' => $p->color ?: $this->defaultColor($p->id),
             'labelColor' => '#fff',
             'probability_weight' => $p->probability_weight,
+            'display_order' => $p->display_order,
             'is_winner' => $p->is_winner,
         ])->values()->all();
 

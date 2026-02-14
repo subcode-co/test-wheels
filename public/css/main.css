@@ -97,16 +97,19 @@
   }
 }
 
-/* Game Container: space below navbar, no overlap */
+/* Game Container: space below navbar, no overlap, consistent on all devices */
 .game-container {
   font-family: 'Cairo', sans-serif;
   min-height: 100vh;
-  padding-top: 72px;
+  min-height: 100dvh;
+  padding-top: max(72px, env(safe-area-inset-top, 72px));
+  padding-bottom: env(safe-area-inset-bottom, 0);
   box-sizing: border-box;
   background: #0f0c29;
   background: linear-gradient(to bottom, #24243e, #302b63, #0f0c29);
   color: white;
   direction: rtl;
+  position: relative;
 }
 
 .game-dashboard {
@@ -371,7 +374,7 @@
 /* Form responsive: smaller padding & fonts on small screens */
 @media (max-width: 768px) {
   .game-container {
-    padding-top: 0;
+    padding-top: 72px;
   }
 
   .auth-box-premium {

@@ -39,20 +39,8 @@ class PrizeResource extends Resource
                 ->label('الاسم')
                 ->required()
                 ->maxLength(255),
-            TextInput::make('code')
-                ->label('الكود')
-                ->required()
-                ->maxLength(50)
-                ->unique(ignoreRecord: true),
-            TextInput::make('probability_weight')
-                ->label('وزن الاحتمال')
-                ->numeric()
-                ->default(1)
-                ->minValue(1),
-            TextInput::make('display_order')
-                ->label('ترتيب العرض')
-                ->numeric()
-                ->default(0),
+    
+           
             ColorPicker::make('color')
                 ->label('اللون'),
             Toggle::make('is_winner')
@@ -70,9 +58,7 @@ class PrizeResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')->label('السؤال / الجائزة')->searchable(),
-                TextColumn::make('code')->label('الكود'),
-                TextColumn::make('probability_weight')->label('وزن الاحتمال'),
-                TextColumn::make('display_order')->label('الترتيب'),
+          
                 ColorColumn::make('color')->label('اللون'),
                 IconColumn::make('is_winner')->label('فوز')->boolean(),
                 IconColumn::make('is_active')->label('نشط')->boolean(),
@@ -85,8 +71,8 @@ class PrizeResource extends Resource
     {
         return [
             'index' => ListPrizes::route('/'),
-            'create' => CreatePrize::route('/create'),
-            'edit' => EditPrize::route('/{record}/edit'),
+          //  'create' => CreatePrize::route('/create'),
+          //  'edit' => EditPrize::route('/{record}/edit'),
         ];
     }
 }
